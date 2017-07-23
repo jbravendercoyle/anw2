@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
+using System.Linq;
 using UnityEngine;
 
 public class SelectUnit : MonoBehaviour {
 
-	GameObject thisUnit;
+	public GameObject thisUnit;
 	public bool SelectThisUnit;
 
 	// Use this for initialization
@@ -14,7 +16,14 @@ public class SelectUnit : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
+	void OnMouseOver() {
+		if (Input.GetMouseButtonDown(0)) {
+			SelectThisUnit = true;
+		}
+	}
+
 	void Update () {
+
 
 		if (SelectThisUnit == true) {
 			ClickToMove component = thisUnit.GetComponent<ClickToMove> ();

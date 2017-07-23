@@ -47,7 +47,11 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\ClickToMove.cs" />
+     <Compile Include="Assets\Scripts\DragAndClickSelect.cs" />
      <Compile Include="Assets\Scripts\SelectUnit.cs" />
+     <Compile Include="Assets\Scripts\UISelectionBoxScripts\SelectableUnitComponent.cs" />
+     <Compile Include="Assets\Scripts\UISelectionBoxScripts\UnitSelectionComponent.cs" />
+     <Compile Include="Assets\Scripts\UISelectionBoxScripts\Utils.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Other/Utilities/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
