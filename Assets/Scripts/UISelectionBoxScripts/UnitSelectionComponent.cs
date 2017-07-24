@@ -24,7 +24,7 @@ public class UnitSelectionComponent : MonoBehaviour
             {
                 if( selectableObject.selectionCircle != null )
                 {
-					DestroyImmediate(selectableObject.selectionCircle.gameObject, true );
+                    Destroy( selectableObject.selectionCircle.gameObject );
                     selectableObject.selectionCircle = null;
                 }
             }

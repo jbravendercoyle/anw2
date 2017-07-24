@@ -28,6 +28,8 @@ public class ClickToMove : MonoBehaviour {
 
 	public float moveSpeed;						// The Speed the character will move
 
+	[SerializeField]
+	private Animator animator; //animator for unit
 
 
 	void Start () {
@@ -36,6 +38,19 @@ public class ClickToMove : MonoBehaviour {
 	}
 
 	void Update () {
+
+		Vector2 currentVelocity = gameObject.GetComponent<Rigidbody2D> ().velocity;
+		float moveHorizontal = Input.GetAxis ("Mouse X");
+		float moveVertical = Input.GetAxis ("Mouse Y");
+
+		if (moveHorizontal < 0 && currentVelocity.x <= 0) {
+			animator.SetInteger ("DirectionX", -1);
+		} else if (moveHorizontal > 0 && currentVelocity.x >= 0) {
+			animator.SetInteger ("DirectionX", 1);
+		} else {
+			animator.SetInteger ("DirectionX", 0);
+		}
+
 
 		// keep track of the distance between this gameObject and destinationPosition
 		destinationDistance = Vector3.Distance(destinationPosition, myTransform.position);
@@ -53,8 +68,7 @@ public class ClickToMove : MonoBehaviour {
 
 			Vector3 targetPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			destinationPosition = new Vector3 (targetPoint.x, targetPoint.y, transform.position.z);
-				//Quaternion targetRotation = Quaternion.LookRotation(targetPoint - transform.position);
-				//myTransform.rotation = targetRotation;
+
 			}
 
 		// Moves the player if the mouse button is hold down
@@ -62,6 +76,7 @@ public class ClickToMove : MonoBehaviour {
 
 			Vector3 targetPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			destinationPosition = new Vector3 (targetPoint.x, targetPoint.y, transform.position.z);
+
 			}
 
 		// To prevent code from running if not needed
