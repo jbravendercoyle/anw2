@@ -26,12 +26,12 @@ public class ClickToMove : MonoBehaviour {
 	public Vector3 destinationPosition;		// The destination Point
 	private float destinationDistance;			// The distance between myTransform and destinationPosition
 	public GameObject destinationGoal;
-	private GameObject _destinationGoal;
+	public GameObject _destinationGoal;
 	public float moveSpeed;						// The Speed the character will move
 
 	private bool goalcreated;
-	public float moveHorizontal;
-	public float floatmoveVertical;
+	private Vector3 prevLoc;
+	public Vector3 curVe1;
 
 	[SerializeField]
 	private Animator animator; //animator for unit
@@ -41,50 +41,71 @@ public class ClickToMove : MonoBehaviour {
 		myTransform = transform;							// sets myTransform to this GameObject.transform
 		destinationPosition = myTransform.position;			// prevents myTransform reset
 		goalcreated = false;
+		prevLoc = Vector3.zero;
+
 	}
 
 	void Update () {
 
+
 		//Destroys Extra Goals
 		GameObject[] destroyGoal;
-		destroyGoal = GameObject.FindGameObjectsWithTag("Goal");
-		for (int i = 1; i < destroyGoal.Length; i++)
-		{
-			Destroy(destroyGoal[i].gameObject);
+		destroyGoal = GameObject.FindGameObjectsWithTag ("Goal");
+		for (int i = 1; i < destroyGoal.Length; i++) {
+			Destroy (destroyGoal [i].gameObject);
 		}
 		//
 
 		Vector2 currentVelocity = gameObject.GetComponent<Rigidbody2D> ().velocity;
 
-		float moveHorizontal = destinationPosition.x;
-		float moveVertical = destinationPosition.y;
+		//sets animator for direction
+		curVe1 = (transform.position - prevLoc) / Time.deltaTime;
 
-		if (moveHorizontal < 0 && currentVelocity.x <= 0) {
-			animator.SetInteger ("DirectionX", -1);
-		} else if (moveHorizontal > 0 && currentVelocity.x >= 0) {
-			animator.SetInteger ("DirectionX", 1);
-		} else {
+		if (curVe1.y > curVe1.x) {
+			if (curVe1.y > 0 && moveSpeed > 0) {
+				//its moving up
+				animator.SetInteger ("DirectionY", 1);
+			} else if (curVe1.y < 0 && moveSpeed > 0) {			
+				//its moving down
+				animator.SetInteger ("DirectionY", -1);
+			} 
+		}
+
+		if (curVe1.x > curVe1.y) {
+			if (curVe1.x > 0 && moveSpeed > 0) {
+				//its moving right
+				animator.SetInteger ("DirectionX", 1);
+			} else if (curVe1.x < 0 && moveSpeed > 0) {
+				//its moving left
+				animator.SetInteger ("DirectionX", -1);
+			} 
+		}
+
+		if (moveSpeed == 0) {
+			animator.SetInteger ("DirectionY", 0);
 			animator.SetInteger ("DirectionX", 0);
 		}
 
+		//stores previous location...i think
+		prevLoc = transform.position;
+
 
 		// keep track of the distance between this gameObject and destinationPosition
-		destinationDistance = Vector3.Distance(destinationPosition, myTransform.position);
+		destinationDistance = Vector3.Distance (destinationPosition, myTransform.position);
 					
-		if(destinationDistance < .5f){		// To prevent shakin behavior when near destination
+		if (destinationDistance < .5f) {		// To prevent shakin behavior when near destination
 			moveSpeed = 0;
-			Destroy(_destinationGoal);
+			Destroy (_destinationGoal);
 			goalcreated = false;
-		}
-		else if(destinationDistance > .5f){			// To Reset Speed to default
+		} else if (destinationDistance > .5f) {			// To Reset Speed to default
 			moveSpeed = 10;
 		}
 
 
 		// Moves the Player if the Left Mouse Button was clicked
-		if (Input.GetMouseButtonDown(1)&& GUIUtility.hotControl ==0) {
+		if (Input.GetMouseButtonDown (1) && GUIUtility.hotControl == 0) {
 
-			Vector3 targetPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			Vector3 targetPoint = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 			destinationPosition = new Vector3 (targetPoint.x, targetPoint.y, transform.position.z);
 
 			if (goalcreated) {
@@ -96,12 +117,12 @@ public class ClickToMove : MonoBehaviour {
 				goalcreated = true; 
 			}
 
-			}
+		}
 
 		// Moves the player if the mouse button is hold down
-		else if (Input.GetMouseButton(1)&& GUIUtility.hotControl ==0) {
+		else if (Input.GetMouseButton (1) && GUIUtility.hotControl == 0) {
 
-			Vector3 targetPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			Vector3 targetPoint = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 			destinationPosition = new Vector3 (targetPoint.x, targetPoint.y, transform.position.z);
 
 			if (goalcreated) {
@@ -113,15 +134,14 @@ public class ClickToMove : MonoBehaviour {
 				goalcreated = true; 
 			}
 
-			}
+		}
 
 		// To prevent code from running if not needed
-		if(destinationDistance > .5f){
-			myTransform.position = Vector3.MoveTowards(myTransform.position, destinationPosition, moveSpeed * Time.deltaTime);
+		if (destinationDistance > .5f) {	
+
+			//Moves Character
+			//myTransform.position = Vector3.MoveTowards(myTransform.position, destinationPosition, moveSpeed * Time.deltaTime);
+
 		}
-			
-			
 	}
-
-
 }
