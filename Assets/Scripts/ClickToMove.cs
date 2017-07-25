@@ -23,10 +23,15 @@ using System.Collections;
 
 public class ClickToMove : MonoBehaviour {
 	private Transform myTransform;				// this transform
-	private Vector3 destinationPosition;		// The destination Point
+	public Vector3 destinationPosition;		// The destination Point
 	private float destinationDistance;			// The distance between myTransform and destinationPosition
-
+	public GameObject destinationGoal;
+	private GameObject _destinationGoal;
 	public float moveSpeed;						// The Speed the character will move
+
+	private bool goalcreated;
+	public float moveHorizontal;
+	public float floatmoveVertical;
 
 	[SerializeField]
 	private Animator animator; //animator for unit
@@ -35,13 +40,24 @@ public class ClickToMove : MonoBehaviour {
 	void Start () {
 		myTransform = transform;							// sets myTransform to this GameObject.transform
 		destinationPosition = myTransform.position;			// prevents myTransform reset
+		goalcreated = false;
 	}
 
 	void Update () {
 
+		//Destroys Extra Goals
+		GameObject[] destroyGoal;
+		destroyGoal = GameObject.FindGameObjectsWithTag("Goal");
+		for (int i = 1; i < destroyGoal.Length; i++)
+		{
+			Destroy(destroyGoal[i].gameObject);
+		}
+		//
+
 		Vector2 currentVelocity = gameObject.GetComponent<Rigidbody2D> ().velocity;
-		float moveHorizontal = Input.GetAxis ("Mouse X");
-		float moveVertical = Input.GetAxis ("Mouse Y");
+
+		float moveHorizontal = destinationPosition.x;
+		float moveVertical = destinationPosition.y;
 
 		if (moveHorizontal < 0 && currentVelocity.x <= 0) {
 			animator.SetInteger ("DirectionX", -1);
@@ -54,9 +70,11 @@ public class ClickToMove : MonoBehaviour {
 
 		// keep track of the distance between this gameObject and destinationPosition
 		destinationDistance = Vector3.Distance(destinationPosition, myTransform.position);
-
+					
 		if(destinationDistance < .5f){		// To prevent shakin behavior when near destination
 			moveSpeed = 0;
+			Destroy(_destinationGoal);
+			goalcreated = false;
 		}
 		else if(destinationDistance > .5f){			// To Reset Speed to default
 			moveSpeed = 10;
@@ -69,6 +87,15 @@ public class ClickToMove : MonoBehaviour {
 			Vector3 targetPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			destinationPosition = new Vector3 (targetPoint.x, targetPoint.y, transform.position.z);
 
+			if (goalcreated) {
+				_destinationGoal.transform.position = destinationPosition;
+			}
+
+			if (!goalcreated) {
+				_destinationGoal = Instantiate (destinationGoal, destinationPosition, Quaternion.identity);
+				goalcreated = true; 
+			}
+
 			}
 
 		// Moves the player if the mouse button is hold down
@@ -77,11 +104,24 @@ public class ClickToMove : MonoBehaviour {
 			Vector3 targetPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			destinationPosition = new Vector3 (targetPoint.x, targetPoint.y, transform.position.z);
 
+			if (goalcreated) {
+				_destinationGoal.transform.position = destinationPosition;
+			}
+
+			if (!goalcreated) {
+				_destinationGoal = Instantiate (destinationGoal, destinationPosition, Quaternion.identity);
+				goalcreated = true; 
+			}
+
 			}
 
 		// To prevent code from running if not needed
 		if(destinationDistance > .5f){
 			myTransform.position = Vector3.MoveTowards(myTransform.position, destinationPosition, moveSpeed * Time.deltaTime);
 		}
+			
+			
 	}
+
+
 }
