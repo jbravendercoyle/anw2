@@ -47,7 +47,9 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\ClickToMove.cs" />
+     <Compile Include="Assets\Scripts\CombatModeButtonCallback.cs" />
      <Compile Include="Assets\Scripts\DragAndClickSelect.cs" />
+     <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\PlayerParty.cs" />
      <Compile Include="Assets\Scripts\SelectUnit.cs" />
      <Compile Include="Assets\Scripts\UISelectionBoxScripts\SelectableUnitComponent.cs" />

@@ -299,6 +299,10 @@ public class AIPath : AIBase {
 
 			velocity = movementPlane.ToWorld(velocity2D, verticalVelocity);
 		}
+
+		if (GameObject.FindGameObjectWithTag ("Goal") != null) {
+			target = GameObject.FindGameObjectWithTag ("Goal").transform;
+		}
 	}
 
 	/** Direction that the agent wants to move in (excluding physics and local avoidance).

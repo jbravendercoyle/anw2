@@ -11,6 +11,7 @@ public class SelectUnit : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		DefaultAnimator = thisUnit.GetComponent<Animator> ();
 		thisUnit = this.gameObject;
 		SelectThisUnit = true;
 	}
@@ -36,5 +37,7 @@ public class SelectUnit : MonoBehaviour {
 			component.enabled = false;
 			thisUnit.transform.GetChild (0).gameObject.SetActive (false); 
 	}
+			
+
 }
 }

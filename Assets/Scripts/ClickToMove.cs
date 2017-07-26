@@ -120,6 +120,22 @@ public class ClickToMove : MonoBehaviour {
 
 		}
 
+		////////////////////////////////////////////////////////
+		/// Changing Animator to Weapon Stance On Combat Mode///
+		/// ////////////////////////////////////////////////////
+
+		Animator thisUnitAnimator = this.gameObject.GetComponent<Animator> ();
+
+		if (GameManager.CombatMode == true) {
+
+			thisUnitAnimator.runtimeAnimatorController = Resources.Load ("RifleAnimator") as RuntimeAnimatorController;
+		} 
+		if (!GameManager.CombatMode == false) {
+
+			thisUnitAnimator.runtimeAnimatorController = Resources.Load ("PlayerAnimator") as RuntimeAnimatorController;
+		}
+
+
 		// To prevent code from running if not needed
 		if (destinationDistance > .5f) {	
 
