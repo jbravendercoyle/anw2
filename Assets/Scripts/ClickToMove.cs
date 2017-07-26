@@ -30,8 +30,6 @@ public class ClickToMove : MonoBehaviour {
 	public float moveSpeed;						// The Speed the character will move
 
 	private bool goalcreated;
-	private Vector3 prevLoc;
-	public Vector3 curVe1;
 
 	[SerializeField]
 	private Animator animator; //animator for unit
@@ -41,7 +39,6 @@ public class ClickToMove : MonoBehaviour {
 		myTransform = transform;							// sets myTransform to this GameObject.transform
 		destinationPosition = myTransform.position;			// prevents myTransform reset
 		goalcreated = false;
-		prevLoc = Vector3.zero;
 
 	}
 
@@ -59,36 +56,23 @@ public class ClickToMove : MonoBehaviour {
 		Vector2 currentVelocity = gameObject.GetComponent<Rigidbody2D> ().velocity;
 
 		//sets animator for direction
-		curVe1 = (transform.position - prevLoc) / Time.deltaTime;
 
-		if (curVe1.y > curVe1.x) {
-			if (curVe1.y > 0 && moveSpeed > 0) {
-				//its moving up
-				animator.SetInteger ("DirectionY", 1);
-			} else if (curVe1.y < 0 && moveSpeed > 0) {			
-				//its moving down
-				animator.SetInteger ("DirectionY", -1);
-			} 
+
+		if (destinationPosition.x < myTransform.position.x) {
+			animator.SetInteger ("DirectionX", -1);
+		} else if (destinationPosition.x > myTransform.position.x) {
+			animator.SetInteger ("DirectionX", 1);
+		} 
+			
+		if (destinationPosition.y < myTransform.position.y) {
+			animator.SetInteger ("DirectionY", -1);
+		} else if (destinationPosition.y > myTransform.position.y) {
+			animator.SetInteger ("DirectionY", 1);
 		}
-
-		if (curVe1.x > curVe1.y) {
-			if (curVe1.x > 0 && moveSpeed > 0) {
-				//its moving right
-				animator.SetInteger ("DirectionX", 1);
-			} else if (curVe1.x < 0 && moveSpeed > 0) {
-				//its moving left
-				animator.SetInteger ("DirectionX", -1);
-			} 
-		}
-
 		if (moveSpeed == 0) {
 			animator.SetInteger ("DirectionY", 0);
 			animator.SetInteger ("DirectionX", 0);
 		}
-
-		//stores previous location...i think
-		prevLoc = transform.position;
-
 
 		// keep track of the distance between this gameObject and destinationPosition
 		destinationDistance = Vector3.Distance (destinationPosition, myTransform.position);
